@@ -2,6 +2,8 @@
 #include "Menu.h"
 #include <SFML\Graphics.hpp>
 #include <string>
+#include <map>
+#include <memory>
 
 class Tekst {
 private:
@@ -34,10 +36,15 @@ int main() {
 	ustawienia.antialiasingLevel = 8;
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Console Survive", sf::Style::Default, ustawienia);
 	window.setFramerateLimit(30);
+	window.setVerticalSyncEnabled(true);
+
 	sf::Vector2f pos = sf::Vector2f(50, 50);
 	std::string tekst1 = "Obudzilem sie w jakiejs ciemnej piwnicy, z przodu widze korytarz\nCo robic?";
-	window.setVerticalSyncEnabled(true);
-	Tekst jeden(tekst1, "FBI.ttf", pos);
+
+	
+	std::map<std::string, std::unique_ptr<Tekst>> teksty;
+	teksty.insert(std::make_pair("t1", std::unique_ptr<Tekst>(new Tekst(tekst1, "FBI.ttf", pos))));
+
 
 	while (window.isOpen())
 	{
@@ -51,7 +58,7 @@ int main() {
 		}
 
 		window.clear();
-		jeden.draw(window);
+		teksty["t1"]->draw(window);
 		window.display();
 	}
 
